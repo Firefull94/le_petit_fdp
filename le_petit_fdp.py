@@ -98,40 +98,48 @@ def add_your_own():
     st.header("Add your own words !")
     st.markdown('In this section you can add the words yourself with their description, translation and examples !')
     st.markdown('You will be able to complete your own dictionnary without me when you will be in France !')
-    with st.form(key='add_word_form'):
-        cat = st.radio("Select the category", ('insultes', 'funny', 'swear'), key='category')
+    
+    # Predefined password
+    correct_password = st.secrets["password"]
 
-        filename = "lpfdp_" + cat
-        path = filename + ".xlsx"
+    # Password input
+    password = st.text_input("Enter password to access this section", type='password')
+
+    if password == correct_password:
+        with st.form(key='add_word_form'):
+            cat = st.radio("Select the category", ('insultes', 'funny', 'swear'), key='category')
+
+            filename = "lpfdp_" + cat
+            path = filename + ".xlsx"
 
 
-        df = pd.read_excel(path)
-        df = df.fillna("No data")
+            df = pd.read_excel(path)
+            df = df.fillna("No data")
 
-        word = st.text_input("Word", value="No data")
-        alternative = st.text_input("Alternative", value="No data")
-        translation = st.text_input("Translation", value="No data")
-        description = st.text_area("Description", value="No data")
-        example = st.text_area("Example", value="No data")
-        example_translate = st.text_area("Example Translated", value="No data")
+            word = st.text_input("Word", value="No data")
+            alternative = st.text_input("Alternative", value="No data")
+            translation = st.text_input("Translation", value="No data")
+            description = st.text_area("Description", value="No data")
+            example = st.text_area("Example", value="No data")
+            example_translate = st.text_area("Example Translated", value="No data")
 
-        submit_button = st.form_submit_button(label='Submit')
+            submit_button = st.form_submit_button(label='Submit')
 
-        if submit_button:
-            new_data = {
-                'word': [word],
-                'alternative': [alternative],
-                'translation': [translation],
-                'description': [description],
-                'example': [example],
-                'example_translate': [example_translate]
-            }
-            df_new = pd.DataFrame(new_data)
+            if submit_button:
+                new_data = {
+                    'word': [word],
+                    'alternative': [alternative],
+                    'translation': [translation],
+                    'description': [description],
+                    'example': [example],
+                    'example_translate': [example_translate]
+                }
+                df_new = pd.DataFrame(new_data)
 
-            df_combined_excel = pd.concat([df, df_new], ignore_index=True)
+                df_combined_excel = pd.concat([df, df_new], ignore_index=True)
 
-            df_combined_excel.to_excel(path, index=False)
-            st.success("Data added successfully!")
+                df_combined_excel.to_excel(path, index=False)
+                st.success("Data added successfully!")
 
 # Mapping section names to their corresponding IDs and functions
 sections = {
