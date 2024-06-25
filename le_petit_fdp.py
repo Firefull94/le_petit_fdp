@@ -63,7 +63,7 @@ def modify(path):
 # Define sections of the app
 def section_insultes():
     st.markdown('<a id="Serious Insults/侮辱"></a>', unsafe_allow_html=True)
-    st.header("Serious Insults/侮辱")
+    st.header(":red[Serious Insults/侮辱]")
     st.write("Welcome to the Serious Insult section. In this section you will find all the most finest and popular insults commonly used in the French language !\n")
     
     st.write("Do not hesitate to use the '🔊 Listen' button to hear the pronunciation !")
@@ -74,7 +74,7 @@ def section_insultes():
 
 def section_swear():
     st.markdown('<a id="about"></a>', unsafe_allow_html=True)
-    st.header("Swear words/悪口")
+    st.header(":green[Swear words/悪口]")
     st.write("Welcome to the Swear words section. In this section you will find all the most finest and popular bad words commonly used in the French language !\n")
     
     st.write("Do not hesitate to use the '🔊 Listen' button to hear the pronunciation !")
@@ -85,7 +85,7 @@ def section_swear():
 
 def section_funny():
     st.markdown('<a id="Funny Insults/侮辱"></a>', unsafe_allow_html=True)
-    st.header("Funny Insults/ばか侮辱")
+    st.header(":orange[Funny Insults/ばか侮辱]")
     st.write("Welcome to the Funny Insult section. Basically insult for fun between friend, nothing serious here. In this section you will find all the most funniest, finest and popular insults commonly used in the French language !\n")
     
     st.write("Do not hesitate to use the '🔊 Listen' button to hear the pronunciation !")
