@@ -34,24 +34,17 @@ def reader(path):
         st.markdown(row['example'])
         st.markdown(row['example_translate'])
 
-        if row['alternative'] == "No data":
-            col1, col2 = st.columns([1,5])
-            with col2:
-                if st.button("🔊 Word ", key = row['word']):
-                    text_to_speech(row['word'])
-            with col1:
-                if st.button("🔊 Example", key = row['example']):
-                    text_to_speech(row['example'])
-        
-        else:
-            col1, col2, col3 = st.columns([1,1,3])
-            with col2:
-                if st.button("🔊 Word ", key = row['word']):
-                    text_to_speech(row['word'])
+
+        col1, col2, col3 = st.columns([1,1,3])
+        with col1:
+            if st.button("🔊 Word ", key = row['word']):
+                text_to_speech(row['word'])
+        if row['alternative'] != "No data":        
             with col3:
                 if st.button("🔊 Alternative", key = row['alternative']):
                     text_to_speech(row['alternative'])
-            with col1:
+        if row['example'] != "No data":    
+            with col2:
                 if st.button("🔊 Example", key = row['example']):
                     text_to_speech(row['example'])
 
@@ -101,7 +94,7 @@ def add_your_own():
     
     # Predefined password
     correct_password = st.secrets["password"]
-
+    # correct_password = 'a'
     # Password input
     password = st.text_input("Enter password to access this section", type='password')
 
@@ -153,7 +146,8 @@ def add_your_own():
         select_word = st.selectbox("Select the word to update", options=words, key="select_word" )
         action = st.radio("Select the action", ("Delete", "Modify"), key="action")
 
-        word_id = df2[df2["word"]==select_word]
+        word_id = df2.index[df2["word"]==select_word][0]
+
         if action == "Modify":
             altmod = df2["alternative"].iloc[word_id]
             transmod = df2["translation"].iloc[word_id]
@@ -161,6 +155,7 @@ def add_your_own():
             exmod = df2["example"].iloc[word_id]
             extransmod = df2["example_translate"].iloc[word_id]
 
+            newword = st.text_input("Word", value=select_word)
             new_alt = st.text_input("Alternative", value=altmod)
             new_trans = st.text_input("Translation", value=transmod)
             new_desc = st.text_area("Description", value=descmod)
@@ -175,7 +170,7 @@ def add_your_own():
             if action == "Modify":
                 df2 = df2.drop(word_id)
                 new_data = {
-                    'word': [select_word],
+                    'word': [newword],
                     'alternative': [new_alt],
                     'translation': [new_trans],
                     'description': [new_desc],
