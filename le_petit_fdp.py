@@ -140,57 +140,59 @@ def add_your_own():
 
                 df_combined_excel.to_excel(path, index=False)
                 st.success("Data added successfully!")
-        with st.form(key='update'):
-            cat2 = st.radio("Select the category", ('insultes', 'funny', 'swear'), key='category2')
-            filename2 = "lpfdp_" + cat2
-            path2 = filename2 + ".xlsx"
+        
+        st.subheader("Made a mistake ?")
+        st.markdown("You can correct the data in this section !")
+        cat2 = st.radio("Select the category", ('insultes', 'funny', 'swear'), key='category2')
+        filename2 = "lpfdp_" + cat2
+        path2 = filename2 + ".xlsx"
 
-            df2 = pd.read_excel(path2)
-            df2 = df2.fillna("No data")
-            words = df2["word"].tolist()
-            select_word = st.selectbox("Select the word to update", options=words, key="select_word" )
-            action = st.radio("Select the action", ("Delete", "Modify"), key="action")
+        df2 = pd.read_excel(path2)
+        df2 = df2.fillna("No data")
+        words = df2["word"].tolist()
+        select_word = st.selectbox("Select the word to update", options=words, key="select_word" )
+        action = st.radio("Select the action", ("Delete", "Modify"), key="action")
 
-            word_id = df2[df2["word"]==select_word]
+        word_id = df2[df2["word"]==select_word]
+        if action == "Modify":
+            altmod = df2["alternative"].iloc[word_id]
+            transmod = df2["translation"].iloc[word_id]
+            descmod = df2["description"].iloc[word_id]
+            exmod = df2["example"].iloc[word_id]
+            extransmod = df2["example_translate"].iloc[word_id]
+
+            new_alt = st.text_input("Alternative", value=altmod)
+            new_trans = st.text_input("Translation", value=transmod)
+            new_desc = st.text_area("Description", value=descmod)
+            new_ex = st.text_area("Example", value=exmod)
+            new_extrans = st.text_area("Example Translated", value=extransmod)
+
+            
+        submit_button_update = st.button(label='Update')
+
+        if submit_button_update:
+            
             if action == "Modify":
-                altmod = df2["alternative"].iloc[word_id]
-                transmod = df2["translation"].iloc[word_id]
-                descmod = df2["description"].iloc[word_id]
-                exmod = df2["example"].iloc[word_id]
-                extransmod = df2["example_translate"].iloc[word_id]
+                df2 = df2.drop(word_id)
+                new_data = {
+                    'word': [select_word],
+                    'alternative': [new_alt],
+                    'translation': [new_trans],
+                    'description': [new_desc],
+                    'example': [new_ex],
+                    'example_translate': [new_extrans]
+                }
+                df_new2 = pd.DataFrame(new_data)
 
-                new_alt = st.text_input("Alternative", value=altmod)
-                new_trans = st.text_input("Translation", value=transmod)
-                new_desc = st.text_area("Description", value=descmod)
-                new_ex = st.text_area("Example", value=exmod)
-                new_extrans = st.text_area("Example Translated", value=extransmod)
+                df_combined_excel2 = pd.concat([df2, df_new2], ignore_index=True)
 
-                
-            submit_button_update = st.form_submit_button(label='Update')
+                df_combined_excel2.to_excel(path2, index=False)
+                st.success("Data modified successfully!")
 
-            if submit_button_update:
-                
-                if action == "Modify":
-                    df2 = df2.drop(word_id)
-                    new_data = {
-                        'word': [select_word],
-                        'alternative': [new_alt],
-                        'translation': [new_trans],
-                        'description': [new_desc],
-                        'example': [new_ex],
-                        'example_translate': [new_extrans]
-                    }
-                    df_new2 = pd.DataFrame(new_data)
-
-                    df_combined_excel2 = pd.concat([df2, df_new2], ignore_index=True)
-
-                    df_combined_excel2.to_excel(path2, index=False)
-                    st.success("Data modified successfully!")
-
-                elif action == "Delete":
-                    df2 = df2.drop(word_id)
-                    df2.to_excel(path2, index=False)
-                    st.success("Data deleted successfully!")
+            elif action == "Delete":
+                df2 = df2.drop(word_id)
+                df2.to_excel(path2, index=False)
+                st.success("Data deleted successfully!")
 
 
 
