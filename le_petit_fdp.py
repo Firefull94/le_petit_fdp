@@ -149,7 +149,7 @@ def add_your_own():
             df2 = df2.fillna("No data")
             words = df2["word"].tolist()
             select_word = st.selectbox("Select the word to update", options=words, key="select_word" )
-            action = st.radio("Select the action", ("Delete, Modify"), key="action")
+            action = st.radio("Select the action", ("Delete", "Modify"), key="action")
 
             word_id = df2[df2["word"]==select_word]
             if action == "Modify":
